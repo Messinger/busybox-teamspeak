@@ -23,10 +23,10 @@ RUN chown -R default /opt/teamspeak
 RUN mkdir /data && chown default:default /data
 
 # Load in all of our config files.
-ADD    ./scripts/start /start
+ADD    ./scripts/start.sh /start.sh
 
 # Fix all permissions
-RUN    chmod +x /start
+RUN    chmod +x /start.sh
 
 # /start runs it.
 EXPOSE 9987/udp 10011 30033
@@ -34,5 +34,5 @@ EXPOSE 9987/udp 10011 30033
 USER default
 VOLUME ["/data"]
 WORKDIR /data
-CMD    ["/start"]
+CMD    ["/start.sh"]
 
