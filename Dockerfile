@@ -1,27 +1,26 @@
 # -----------------------------------------------------------------------------
-# docker-teamspeak
+# docker-busybox-teamspeak
 #
-# Builds a basic docker image that can run TeamSpeak
+# Builds a basic docker image that can run TeamSpeak based on busybox
 # (http://teamspeak.com/).
 #
-# Authors: Isaac Bythewood
-# Updated: May 18th, 2015
+# Original Authors: Isaac Bythewood
+# Authors: Rajko Albrecht
+# Updated: Sep 11, 2015
 # Require: Docker (http://www.docker.io/)
 # -----------------------------------------------------------------------------
 
-# Base system is the LTS version of Ubuntu.
-FROM   ubuntu:14.04
+FROM progrium/busybox
 
-# Make sure we don't get notifications we can't answer during building.
-ENV    DEBIAN_FRONTEND noninteractive
+# need curl && wget
+RUN opkg-install curl wget 
 
-# Download and install everything from the repos.
-RUN    apt-get --yes update; apt-get --yes upgrade
-RUN    apt-get --yes install curl
 
 # Download and install TeamSpeak 3
-RUN    curl "http://dl.4players.de/ts/releases/3.0.11.3/teamspeak3-server_linux-amd64-3.0.11.3.tar.gz" -o teamspeak3-server_linux-amd64-3.0.11.3.tar.gz
-RUN    tar zxf teamspeak3-server_linux-amd64-3.0.11.3.tar.gz; mv teamspeak3-server_linux-amd64 /opt/teamspeak; rm teamspeak3-server_linux-amd64-3.0.11.3.tar.gz
+ADD ./scripts/setup_ts.sh /setup_ts.sh
+RUN sh /setup_ts.sh
+RUN chown -R default /opt/teamspeak
+RUN mkdir /data && chown default:default /data
 
 # Load in all of our config files.
 ADD    ./scripts/start /start
@@ -30,9 +29,10 @@ ADD    ./scripts/start /start
 RUN    chmod +x /start
 
 # /start runs it.
-EXPOSE 9987/udp
-EXPOSE 10011
-EXPOSE 30033
+EXPOSE 9987/udp 10011 30033
 
+USER default
 VOLUME ["/data"]
+WORKDIR /data
 CMD    ["/start"]
+
