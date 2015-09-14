@@ -24,19 +24,20 @@ RUN mkdir /data && chown default:default /data
 
 # Load in all of our config files.
 
-ADD ./scripts/start.sh /start.sh
-
-# Fix all permissions
-RUN chmod +x /start.sh
-
-# /start runs it.
 EXPOSE 9987/udp 10011 30033
 
 ADD ./scripts/backup_data.sh /backup_data.sh
 RUN chmod +x /backup_data.sh
+ADD ./scripts/restore_data.sh /restore_data.sh
+RUN chmod +x /restore_data.sh
+
+# /start runs it.
+ADD ./scripts/start.sh /start.sh
+# Fix all permissions
+RUN chmod +x /start.sh
 
 USER default
 VOLUME ["/data"]
 WORKDIR /data
-CMD  ["/start.sh"]
+ENTRYPOINT  ["/start.sh"]
 
