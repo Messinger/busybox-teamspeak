@@ -22,7 +22,7 @@ that you can easily map a proxy to. If this is the only thing running on your
 system you can map the ports to 9987, 10011, 30033 and no proxy is needed. i.e.
 `-p=9987:9987/udp  -p=10011:10011 -p=30033:30033`
     
-    sudo docker run --name="teampseak3" -d=true -p=9987:9987/udp -p=10011:10011 -p=30033:30033 elektritter/busybox-teamspeak
+    sudo docker run --name="teamspeak3" -d=true -p=9987:9987/udp -p=10011:10011 -p=30033:30033 elektritter/busybox-teamspeak
 
 If you want mounted data to host filesystem make sure, your mounted directory on your host machine is already created before running:
     
@@ -94,4 +94,4 @@ Now you'll find inside folder "tsbackup" a tar file with TS3 database, logs, upl
 
     `docker rm -v bts3`
 
-When now starting the container ts3new you'll have all backuped data inside this new container. You you may remove the original container and rename ts3new to teamspeak3 if you want.
+When now starting the container ts3new you'll have all backuped data inside this new container. You may remove the original container and rename ts3new to teamspeak3 if you want.
