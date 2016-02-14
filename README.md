@@ -76,7 +76,7 @@ If not running with mounted data folder you can simply creating a backup from yo
 
 Now you'll find inside folder "tsbackup" a tar file with TS3 database, logs, uploads etc.
 
-### Restoring data to a new busybox-teamspeack container
+### Restoring data to a new busybox-teamspeak container
 
 * create a new container
 
