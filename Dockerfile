@@ -15,27 +15,22 @@ FROM progrium/busybox
 # need curl && wget
 RUN opkg-install curl wget 
 
-
 # Download and install TeamSpeak 3
 ADD ./scripts/setup_ts.sh /setup_ts.sh
-RUN sh /setup_ts.sh
-RUN chown -R default /opt/teamspeak
-RUN mkdir /data && chown default:default /data
-
-# Load in all of our config files.
-
-EXPOSE 9987/udp 10011 30033
-
 ADD ./scripts/backup_data.sh /backup_data.sh
-RUN chmod +x /backup_data.sh
 ADD ./scripts/restore_data.sh /restore_data.sh
-RUN chmod +x /restore_data.sh
-
 # /start runs it.
 ADD ./scripts/start.sh /start.sh
-# Fix all permissions
-RUN chmod +x /start.sh
+ENV TS_VERSION=3.0.12.1
+RUN sh /setup_ts.sh &&\
+    chown -R default /opt/teamspeak &&\
+    mkdir /data &&\
+    chown default:default /data &&\
+    chmod +x /backup_data.sh&&\
+    chmod +x /restore_data.sh &&\
+    chmod +x /start.sh
 
+EXPOSE 9987/udp 10011 30033
 USER default
 VOLUME ["/data"]
 WORKDIR /data
